@@ -1988,18 +1988,19 @@ footer{
         let linedown = document.getElementById("sub");
         let sbutton = document.getElementById("sbutton");
 
-        console.log("StartStudy is started!!");
-        
         if(choiceismade){
             lineup.innerHTML = "<div>이제 " + bookselected + "의 유닛 " + unitselected + "의 학습을 시작합니다. 큰소리로 따라 말하세요.</div>";
             mainscreen.innerHTML = '<img src="HSP.PNG" width="50%" height="100%">';
             linedown.innerHTML = "<div>첫번째 단계는 학습한 내용 복습하기 중 그림보며 듣고 따라 말하기 입니다.</div>";
+            
             if(bookselected=="Alphabet Phonics"){
               //sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="그만하기" onclick="phonicsletterstudy()">';
               sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="다음학습" onclick="wordstudy_2in()">';
+              document.getElementById("startstudy").disabled = true;
             }
             else{
               sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="다음학습" onclick="wordstudy_2in()">';
+              document.getElementById("startstudy").disabled = true;
             }
 
             //첫번째 학습 단어학습
@@ -2038,6 +2039,7 @@ footer{
                 myaudio.currentTime=0;
                 wordstudy_1();
                 if(wordstudycount==selecteditem.length){
+                  document.getElementById("startstudy").disabled = false;
                   linedown.innerHTML = "<div>다음학습을 누르세요!!!</div>";
                 }
               }, audioduration);
@@ -2061,9 +2063,11 @@ footer{
           if(bookselected=="Alphabet Phonics"){
             //sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="그만하기" onclick="phonicsletterstudy()">';
             sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="다음학습" onclick="wordplay_1in()">';
+            document.getElementById("startstudy").disabled = true;
           }
           else{
             sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="다음학습" onclick="wordplay_1in()">';
+            document.getElementById("startstudy").disabled = true;
           }
 
           //첫번째 학습 단어학습
@@ -2106,6 +2110,7 @@ footer{
                 wordstudy_2();
                 if(wordstudycount==selecteditem.length){
                   linedown.innerHTML = "<div>다음학습을 누르세요!!!</div>";
+                  document.getElementById("startstudy").disabled = false;
                 }
               }, audioduration);
             }
