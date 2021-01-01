@@ -118,7 +118,14 @@ footer{
     width: 100px;
     height: 40px;
     border-radius: 3px;
-    
+}
+
+.justbutton{
+    cursor: pointer;
+    width: 100px;
+    height: 20px;
+    border-radius: 3px;
+    font-size:xx-small;
 }
 
 .questionimage imge {
@@ -2222,7 +2229,7 @@ footer{
       myaudio.currentTime = 0;
       
       lineup.innerHTML = "<div>아래 버튼을 누르면 들려주는 단어에 해당되는 그림을 클릭하세요.</div>";
-      linedown.innerHTML = '<div><input type="button" style="height:20px;" value="준비되면 누르세요." onclick="playquestion()"></div>';
+      linedown.innerHTML = '<div><input class="justbutton" type="button" style="height:20px;" value="준비되면 누르세요." onclick="playquestion()"></div>';
 
       totalproblem++;
 
