@@ -140,6 +140,7 @@ footer{
     -o-transition:.3s;
     transition: .3s;
     overflow: hidden;
+    cursor: pointer;
   }
 
   .questionimage:hover img {
@@ -148,12 +149,21 @@ footer{
     -ms-transform:scale(1.2);
     -o-transform:scale(1.2);
     transform:scale(1.2);
+    overflow: hidden;
+  }
+
+  .qbutton{
+    font-size:xx-large;
+    width: 200px;
+    height: 80px;
+    cursor: pointer;
   }
   
 </style>
 
 <script type="text/javascript">
 
+    //Easy Phonics [unit, image, sound, word, sentence:s or word:w, only word, word with blank, phnoics pattern]
     let ap = [['1','01.jpg','01.mp3','<font color="red">a<font color="black">pple','w','apple','_pple','a'],
         ['1','02.jpg','02.mp3','<font color="red">a<font color="black">nt','w','ant','_nt','a'],
         ['1','03.jpg','03.mp3','<font color="red">b<font color="black">ear','w','bear','_ear','b'],
@@ -1515,11 +1525,8 @@ footer{
       //선택의 유무
     let choiceismade;
 
-    // 루틴 돌릴때 카운트 수 listlength를 넘어가면 다시 1로 됨.초기값은 1
-    let count=1;
-
     // 전체 몇번 Repeat 했는지 카운트 하는 변수
-    let repeatcount = 0;
+    let repeatcount = -1;
 
     // 선택된 책의 이름을 담는 변수
     let bookselected;
@@ -1545,8 +1552,8 @@ footer{
     let correctanswer = 0;
     let totalproblem = 0;
 
-    // 게임을 위한 선택된 단어에 대한 정보 배열 [book, unit, image, sound, word, sentence:s or word:w]
-    let playunitinfo = [['0','0','0','0','0','0']];
+    // 게임을 위한 선택된 단어에 대한 정보 배열 [book, unit, image, sound, word, sentence:s or word:w, only word, word with blank, pattern letter(s)]
+    let playunitinfo = [['0','0','0','0','0','0','0','0','0']];
 
     //해당 문제의 mp3파일의 전체 경로
     let problemaudiosource;
@@ -1582,7 +1589,7 @@ footer{
         StopStudy();
 
         //교재가 다시 시작되므로 반복횟수는 0으로 재설정
-        repeatcount = 0;
+        repeatcount = -1;
         let repeatshow  = document.getElementById("repeat");
         let repeatnumber  = document.getElementById("repeatnumber");
         let tellrepeat="";
@@ -1622,7 +1629,7 @@ footer{
 
         //Stopplaygame();
 
-        document.getElementsByClassName("article2").innerHTML='<img id="images" src = "HSPC.PNG" width="400px" height="400px">';
+        document.getElementsByClassName("article2").innerHTML='<img id="images" src = "HSPC.PNG" width="100%" height="100%">';
 
         //시작
         if(units[units.length-1].checked){
@@ -2003,6 +2010,25 @@ footer{
               document.getElementById("startstudy").disabled = true;
             }
 
+            let units = document.getElementsByName('unit');
+
+            let repeatshow  = document.getElementById("repeat");
+            let repeatnumber  = document.getElementById("repeatnumber");
+            let tellrepeat="";
+
+            tellrepeat = tellrepeat + bookselected + "<br>";
+            for(let i=0;i<units.length;i++){
+              if(units[i].checked)
+              tellrepeat+="Unit"+units[i].value+',';
+            }
+
+            repeatcount++;
+
+            tellrepeat = tellrepeat.slice(0,-1);
+
+            repeatshow.innerHTML = tellrepeat;
+            repeatnumber.innerHTML = "<span style='font-size:60px;'>" + repeatcount + "</span>"
+
             //첫번째 학습 단어학습
             //그림보여주면 발음해주기
             wordstudycount = 0;
@@ -2059,7 +2085,7 @@ footer{
       if(choiceismade){
           lineup.innerHTML = "<div>이제 " + bookselected + "의 유닛 " + unitselected + "의 학습을 시작합니다. 큰소리로 따라 말하세요.</div>";
           mainscreen.innerHTML = '<img src="HSP.PNG" width="50%" height="100%">';
-          linedown.innerHTML = "<div>첫번째 단계는 학습한 내용 복습하기 중 단어보며 듣고 따라 말하기 입니다.</div>";
+          linedown.innerHTML = "<div>두번째 단계는 학습한 내용 복습하기 중 단어보며 듣고 따라 말하기 입니다.</div>";
           if(bookselected=="Alphabet Phonics"){
             //sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="그만하기" onclick="phonicsletterstudy()">';
             sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="다음학습" onclick="wordplay_1in()">';
@@ -2127,7 +2153,7 @@ footer{
 
         sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="학습시작" onclick="StartStudy()">';
         lineup.innerHTML = "<div>이제 " + bookselected + "의 유닛 " + unitselected + "의 학습이 끝났습니다.</div>";
-        mainscreen.innerHTML = '<img src="HSPC.PNG" width="50%" height="100%">';
+        mainscreen.innerHTML = '<img src="HSPC.PNG" width="100%" height="100%">';
         linedown.innerHTML = "<div>Welcome to Hansol Plus English Phoincs Learning Play!!</div>";
 
         //음성이 있다면 다 멈춤
@@ -2145,7 +2171,7 @@ footer{
 
     }
 
-    //play 1 : 들려주는 음성에 해당되는 단어를 찾아내는 게임
+    //play 1 : 들려주는 음성에 해당되는 단어의 그림을 찾아내는 게임
     function wordplay_1in(){
 
       let lineup = document.getElementById("title");
@@ -2158,19 +2184,17 @@ footer{
       myaudio.currentTime = 0;
       
       lineup.innerHTML = "<div>이제 " + bookselected + "의 유닛 " + unitselected + "의 학습 중!^^</div>";
-      mainscreen.innerHTML = '<img src="HSPC.PNG" width="50%" height="100%">';
-      linedown.innerHTML = '<div><input type="button" style="height:35px;" value="준비되면 누르세요." onclick="playquestion()"></div>';
       sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="다음학습" onclick="wordplay_2in()">';
 
       //초기화
-      for(let i=1;i<playunitinfo.length;i++){
+      for(let i=1;i<playunitinfo.length;){
         playunitinfo.splice(1,1);
       }
 
       // 게임할 배열들만 옮김
       for(let i=1;i<selecteditem.length;i++){
         if(selecteditem[i][4]=='w'){
-          playunitinfo.push([document.getElementById('book').value,selecteditem[i][0],selecteditem[i][1],selecteditem[i][2],selecteditem[i][3],selecteditem[i][4]]);
+          playunitinfo.push([document.getElementById('book').value,selecteditem[i][0],selecteditem[i][1],selecteditem[i][2],selecteditem[i][3],selecteditem[i][4],selecteditem[i][5],selecteditem[i][6],selecteditem[i][7]]);
         }
       }
       
@@ -2182,6 +2206,10 @@ footer{
       }
       else {
         alert("선택한 유닛에는 학습할 단어가 없습니다.");
+        lineup.innerHTML = "<div>" + bookselected + "의 유닛 " + unitselected + "에는 새롭게 학습할 단어가 없습니다.</div>";
+        mainscreen.innerHTML = '<img src="HSPC.PNG" width="100%" height="100%">';
+        linedown.innerHTML = '<div>다시 학습할려면 학습하기를 누르세요.</div>';
+        sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="학습하기" onclick="StartStudy()">';
       }
     }
 
@@ -2227,19 +2255,20 @@ footer{
       let sbutton = document.getElementById("sbutton");
 
       let q1, q2, q3, q4, centerquestionimage;
-      let tempplayui = [['0','0','0','0','0','0','0','0']];
+      // 게임을 위한 선택된 단어에 대한 정보 배열 [book, unit, image, sound, word, sentence:s or word:w, only word, word with blank, pattern letter(s)]
+      let tempplayui = [['0','0','0','0','0','0','0','0','0']];
+
 
       //음성이 있다면 다 멈춤
       myaudio.pause();
       myaudio.currentTime = 0;
       
       lineup.innerHTML = "<div>아래 버튼을 누르면 들려주는 단어에 해당되는 그림을 클릭하세요.</div>";
-      linedown.innerHTML = '<div><input class="justbutton" type="button" style="height:20px;" value="준비되면 누르세요." onclick="playquestion()"></div>';
+      linedown.innerHTML = '<div>준비되면 위에 버튼을 눌러서 문제 음성을 듣고 해당되는 단어를 클릭하세요.</div>';
 
       totalproblem++;
 
-
-      for(let i=1;i<tempplayui.length;i++){
+      for(let i=1;i<tempplayui.length;){
         tempplayui.splice(i,1);
       }
 
@@ -2254,7 +2283,6 @@ footer{
       // 1,2,3,4번중에 어디에 정답을 포함시킬껀지를 랜덤으로 선택
       let randnum2 = Math.random()*4;
       randnum2 = Math.floor(randnum2)+1;
-
 
          //randnum2 = 1;
           if(randnum2==1){
@@ -2343,7 +2371,8 @@ footer{
             +'<span class="questionimage">2<img src="'+q2+'"width="200px" height="190px" onclick="imageclick(2)"></span>'
             +'<div> ---- </div>'
             +'<span class="questionimage">3<img src="'+q3+'" width="200px" height="190px" onclick="imageclick(3)"></span>'
-            +'<span class="questionimage">4<img src="'+q4+'" width="200px" height="190px" onclick="imageclick(4)"></span>';
+            +'<span class="questionimage">4<img src="'+q4+'" width="200px" height="190px" onclick="imageclick(4)"></span>'
+            +'<br><br><div><input class="justbutton" type="button" style="height:40px;" value="준비되면 누르세요." onclick="playquestion()"></div>';
 
           // 그림출력
           mainscreen.innerHTML = centerquestionimage;
@@ -2352,21 +2381,199 @@ footer{
           answer = randnum2;
     }
 
-    //play 2 : 단어에 해당 유닛의 패턴이나 음가에 해당되는 부분을 blank처리해서 선택하는 게임
+    //play 2 : 들려주는 음성에 해당되는 단어를 찾아내는 게임.
     function wordplay_2in(){
+      let lineup = document.getElementById("title");
+      let mainscreen = document.getElementById("main");
+      let linedown = document.getElementById("sub");
+      let sbutton = document.getElementById("sbutton");
 
-    } 
+      //음성이 있다면 다 멈춤
+      myaudio.pause();
+      myaudio.currentTime = 0;
+      
+      lineup.innerHTML = "<div>들려주는 어휘에 해당되는 단어를 클릭하세요.</div>";
+      sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="다음학습" onclick="wordplay_3in()">';
+
+      //초기화 - wordplay_1in()에서 이미 했으므로 필요없음.
+      //바로시작
+      wordplay_2();
+    }
+
+    function wordplay_2_answerclick(theanswer){
+
+      //음성이 있다면 다 멈춤
+      myaudio.pause();
+      myaudio.currentTime = 0;
+
+      useranswer = theanswer;
+
+      if(answer!=0){
+        if(answer==useranswer){
+          correctanswer++;
+          document.getElementById('playscore').innerHTML = totalproblem + "개 중 <br>"+correctanswer+"개 정답";
+          alert("정답입니다~~^^");
+          wordplay_2();
+        }
+        else{
+          document.getElementById('playscore').innerHTML = totalproblem + "개 중 <br>"+correctanswer+"개 정답";
+          alert("아쉬워요, 틀렸어요....ㅠㅠ");
+          wordplay_2();
+        }
+      }
+      else{
+        alert("아직 문제가 출제되지 않았거나, 정답이 정해지지 않았습니다.");
+      }
+    }
 
     function wordplay_2(){
 
+      let mainscreen = document.getElementById("main");
+      let linedown = document.getElementById("sub");
+
+      let q1, q2, q3, q4, centerquestionimage;
+      // 게임을 위한 선택된 단어에 대한 정보 배열 [book, unit, image, sound, word, sentence:s or word:w, only word, word with blank, pattern letter(s)]
+      let tempplayui = [['0','0','0','0','0','0','0','0','0']];
+      
+      linedown.innerHTML = '<div>위 버튼을 클릭해서 들려주는 단어를 찾아 클릭하세요.</div>'
+      //음성이 있다면 다 멈춤
+      myaudio.pause();
+      myaudio.currentTime = 0;
+
+      totalproblem++;
+
+      for(let i=1;i<tempplayui.length;){
+        tempplayui.splice(i,1);
+      }
+
+      for(let i=1;i<playunitinfo.length;i++){
+        tempplayui.push(playunitinfo[i]);
+      }
+
+      // 총 단어수 중 랜덤선택
+      let randnum = Math.random()*(playunitinfo.length-1);
+      randnum = Math.floor(randnum)+1;
+
+      // 1,2,3,4번중에 어디에 정답을 포함시킬껀지를 랜덤으로 선택
+      let randnum2 = Math.random()*4;
+      randnum2 = Math.floor(randnum2)+1;
+
+         //randnum2 = 1;
+          if(randnum2==1){
+            q1 = tempplayui[randnum][4];
+            problemaudiosource = tempplayui[randnum][0]+'/'+tempplayui[randnum][3];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q2 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q3 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q4 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+          }
+          else if(randnum2==2){
+            q2 = tempplayui[randnum][4];
+            problemaudiosource = tempplayui[randnum][0]+'/'+tempplayui[randnum][3];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q1 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q3 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q4 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+          }
+          else if(randnum2==3){
+            q3 = tempplayui[randnum][4];
+            problemaudiosource = tempplayui[randnum][0]+'/'+tempplayui[randnum][3];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q1 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q2 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q4 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+          }
+          else
+          {
+            q4 = tempplayui[randnum][4];
+            problemaudiosource = tempplayui[randnum][0]+'/'+tempplayui[randnum][3];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q1 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q2 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+
+            randnum = Math.random()*(tempplayui.length-1);
+            randnum = Math.floor(randnum)+1;
+            q3 = tempplayui[randnum][4];
+            tempplayui.splice(randnum,1);
+          }
+
+          //wordplay_2_answerclick(answer)
+          centerquestionimage = 
+          '<br><br><button class="qbutton" width="200px" height="190px" onclick="wordplay_2_answerclick(1)">'+q1+'</button>'
+          + '<button class="qbutton" width="200px" height="190px" onclick="wordplay_2_answerclick(2)">'+q2+'</button>'
+          +'<div></div>'
+          + '<button class="qbutton" width="200px" height="190px" onclick="wordplay_2_answerclick(3)">'+q3+'</button>'
+          + '<button class="qbutton" width="200px" height="190px" onclick="wordplay_2_answerclick(4)">'+q4+'</button>'
+          + '<br><br><div><input class="justbutton" type="button" style="height:40px;" value="준비되면 누르세요." onclick="playquestion()"></div>';
+          
+          /*centerquestionimage = '<span class="questionimage">1<img src="'+q1+'" width="200px" height="190px" onclick="imageclick(1)"></span>'
+            +'<span class="questionimage">2<img src="'+q2+'"width="200px" height="190px" onclick="imageclick(2)"></span>'
+            +'<div> ---- </div>'
+            +'<span class="questionimage">3<img src="'+q3+'" width="200px" height="190px" onclick="imageclick(3)"></span>'
+            +'<span class="questionimage">4<img src="'+q4+'" width="200px" height="190px" onclick="imageclick(4)"></span>'
+            +'<br><br><div><input class="justbutton" type="button" style="height:40px;" value="준비되면 누르세요." onclick="playquestion()"></div>';
+          */
+          // 그림출력
+          mainscreen.innerHTML = centerquestionimage;
+
+          // 정답 입력
+          answer = randnum2;
     }
 
-    //play3 : 단어의 발음을 들려주고 해당 단어 찾기 1,2,3,4는 글자
+    //play3 : 들려주는 단어에 빈칸에 들어갈 알파벳이나 패턴을 찾기
+    function wordplay_3in(){
+
+    }
+
     function wordplay_3(){
 
     }
 
-    //play4 : 단어의 발음을 들려주고 해당 단어 찾기 1,2,3,4는 그림
+    //play4 : 
     function wordplay_4(){
 
     }
@@ -2455,7 +2662,7 @@ footer{
                     <div>학습을 시작하기 위해서 교재와 유닛을 선택해 주세요.</div>
             </article>
             <article class="article2" id="main">
-              <img src="HSPC.PNG" width="50%" height="100%" id="mainimg">
+              <img src="HSPC.PNG" width="100%" height="100%" id="mainimg">
               <iframe id="mainframe" style="display:none"></iframe>
             </article>
             <article class="article3" id="sub">
