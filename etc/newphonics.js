@@ -1451,9 +1451,9 @@
 
         tellrepeat = tellrepeat.slice(0,-1);
 
-        /*if(units[15].checked){
-          tellrepeat=bookselected+"<br>전체유닛"
-        }*/
+        if(units[15].checked){
+          tellrepeat=bookselected+"<br>전체유닛";
+        }
 
         //repeatshow.innerHTML = tellrepeat;
         //repeatnumber.innerHTML = "<span style='font-size:60px;'>" + repeatcount + "</span>"
