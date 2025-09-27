@@ -1400,6 +1400,81 @@
 
     // 게임을 위한 선택된 단어에 대한 정보 배열 [book, unit, image, sound, word, sentence:s or word:w, only word, word with blank, pattern letter(s)]
     let playunitinfo = [['0','0','0','0','0','0','0','0','0','0']];
+  // per-play limits (0 = unlimited)
+  let playLimits = { play1:0, play2:0, play3:0, play4:0 };
+  // current play id and counters
+  let currentPlay = null; // 'play1' | 'play2' | 'play3' | 'play4'
+  let playCounters = { play1:0, play2:0, play3:0, play4:0 };
+
+  // Load limits from inputs (or localStorage) into playLimits
+  function loadLimitsToInputs(){
+    try{
+      // if saved in localStorage, load
+      if(window.localStorage){
+        let saved = localStorage.getItem('hsp_playLimits');
+        if(saved){
+          let obj = JSON.parse(saved);
+          playLimits = Object.assign(playLimits, obj);
+        }
+      }
+    }catch(e){/* ignore */}
+    // populate inputs if present
+    const p1 = document.getElementById('limit_play1');
+    const p2 = document.getElementById('limit_play2');
+    const p3 = document.getElementById('limit_play3');
+    const p4 = document.getElementById('limit_play4');
+    if(p1) p1.value = playLimits.play1||0;
+    if(p2) p2.value = playLimits.play2||0;
+    if(p3) p3.value = playLimits.play3||0;
+    if(p4) p4.value = playLimits.play4||0;
+    updateLimitsStatus();
+  }
+
+  // Read inputs and apply to playLimits (and save to localStorage)
+  function applyLimitsFromInputs(){
+    const p1 = document.getElementById('limit_play1');
+    const p2 = document.getElementById('limit_play2');
+    const p3 = document.getElementById('limit_play3');
+    const p4 = document.getElementById('limit_play4');
+    playLimits.play1 = p1? parseInt(p1.value||0,10) : 0;
+    playLimits.play2 = p2? parseInt(p2.value||0,10) : 0;
+    playLimits.play3 = p3? parseInt(p3.value||0,10) : 0;
+    playLimits.play4 = p4? parseInt(p4.value||0,10) : 0;
+    try{
+      if(window.localStorage){
+        localStorage.setItem('hsp_playLimits', JSON.stringify(playLimits));
+      }
+    }catch(e){/* ignore */}
+    updateLimitsStatus();
+    alert('게임 횟수 제한이 적용되었습니다.');
+  }
+
+  function updateLimitsStatus(){
+    const s = document.getElementById('limitsStatus');
+    if(!s) return;
+    s.innerText = '설정: Play1='+playLimits.play1+'회, Play2='+playLimits.play2+'회, Play3='+playLimits.play3+'회, Play4='+playLimits.play4+'회';
+  }
+
+  // Advance to the next play when a play reaches its configured limit.
+  // If currentPlay is 'play1' -> go to play2, 'play2' -> play3, 'play3' -> play4, 'play4' -> finish study.
+  function advanceToNextPlay(){
+    try{
+      if(currentPlay === 'play1'){
+        // start next play
+        wordplay_2in();
+      } else if(currentPlay === 'play2'){
+        wordplay_3in();
+      } else if(currentPlay === 'play3'){
+        wordplay_4in();
+      } else {
+        // default: finish study
+        wordplay_5in();
+      }
+    }catch(e){
+      // fallback to finish study if next play cannot be started
+      try{ wordplay_5in(); }catch(_){}
+    }
+  }
 
     //해당 문제의 mp3파일의 전체 경로
     let problemaudiosource;
@@ -1441,6 +1516,9 @@
         repeatcount = -1;
         let repeatshow  = document.getElementById("repeat");
         let repeatnumber  = document.getElementById("repeatnumber");
+
+  // load saved limits (if any) into inputs
+  loadLimitsToInputs();
         let tellrepeat="";
 
         tellrepeat = tellrepeat + bookselected + "<br>";
@@ -1844,6 +1922,12 @@
         let linedown = document.getElementById("sub");
         let sbutton = document.getElementById("sbutton");
 
+        // wire apply limits button if present (safe to call multiple times)
+        let applyBtn = document.getElementById('applyLimits');
+        if(applyBtn){
+          applyBtn.onclick = function(){ applyLimitsFromInputs(); };
+        }
+
         if(choiceismade){
             lineup.innerHTML = "<div>이제 " + bookselected + "의 유닛 " + unitselected + "의 학습을 시작합니다. 큰소리로 따라 말하세요.</div>";
             mainscreen.innerHTML = '<img src="HSP.PNG" width="50%" height="100%">';
@@ -2073,8 +2157,17 @@
       totalproblem = 0;
       correctanswer = 0;
 
+      // set current play and reset counter
+      currentPlay = 'play1';
+      playCounters.play1 = 0;
+
       if(playunitinfo.length > 1){
-        wordplay_1();
+        // check limit before starting
+        if(playLimits.play1>0 && playCounters.play1>=playLimits.play1){
+          alert('Play1 횟수 제한에 도달했습니다.');
+        } else {
+          wordplay_1();
+        }
       }
       else {
         alert("선택한 유닛에는 학습할 단어가 없습니다.");
@@ -2130,6 +2223,16 @@
       // 게임을 위한 선택된 단어에 대한 정보 배열 [book, unit, image, sound, word, sentence:s or word:w, only word, word with blank, pattern letter(s)]
       let tempplayui = [['0','0','0','0','0','0','0','0','0','0']];
 
+
+      // enforce limit per play and increment counter
+      if(currentPlay === 'play1'){
+        playCounters.play1++;
+        if(playLimits.play1>0 && playCounters.play1>playLimits.play1){
+          alert('Play1 횟수 제한에 도달했습니다. 다음 게임으로 진행합니다.');
+          advanceToNextPlay();
+          return;
+        }
+      }
 
       //음성이 있다면 다 멈춤
       myaudio.pause();
@@ -2263,16 +2366,24 @@
       //음성이 있다면 다 멈춤
       myaudio.pause();
       myaudio.currentTime = 0;
+  // set current play and reset counter
+  currentPlay = 'play2';
+  playCounters.play2 = 0;
 
-      totalproblem--;
+  totalproblem--;
       document.getElementById('playscore').innerHTML = totalproblem + "개 중 <br>"+correctanswer+"개 정답";
       
       lineup.innerHTML = "<div>들려주는 어휘에 해당되는 단어를 클릭하세요.</div>";
       sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="다음학습" onclick="wordplay_3in()">';
 
       //초기화 - wordplay_1in()에서 이미 했으므로 필요없음.
-      //바로시작
-      wordplay_2();
+      // check limit before starting
+      if(playLimits.play2>0 && playCounters.play2>=playLimits.play2){
+        alert('Play2 횟수 제한에 도달했습니다.');
+      } else {
+        //바로시작
+        wordplay_2();
+      }
     }
 
     function wordplay_2_answerclick(theanswer){
@@ -2323,6 +2434,16 @@
 
       for(let i=1;i<playunitinfo.length;i++){
         tempplayui.push(playunitinfo[i]);
+      }
+
+      // enforce limit per play and increment counter
+      if(currentPlay === 'play2'){
+        playCounters.play2++;
+        if(playLimits.play2>0 && playCounters.play2>playLimits.play2){
+          alert('Play2 횟수 제한에 도달했습니다. 다음 게임으로 진행합니다.');
+          advanceToNextPlay();
+          return;
+        }
       }
 
       // 총 단어수 중 랜덤선택
@@ -2511,6 +2632,10 @@
         alert("Theme English는 이 기능을 지원하지 않습니다. 바로 다음 학습으로 넘어가세요.");
         error = true;
       }
+      // set current play and reset counter
+      currentPlay = 'play3';
+      playCounters.play3 = 0;
+
       //바로시작
       if(error){
 
@@ -2561,6 +2686,16 @@
       //음성이 있다면 다 멈춤
       myaudio.pause();
       myaudio.currentTime = 0;
+
+      // enforce limit per play and increment counter
+      if(currentPlay === 'play3'){
+        playCounters.play3++;
+        if(playLimits.play3>0 && playCounters.play3>playLimits.play3){
+          alert('Play3 횟수 제한에 도달했습니다. 다음 게임으로 진행합니다.');
+          advanceToNextPlay();
+          return;
+        }
+      }
 
       totalproblem++;
 
@@ -2700,6 +2835,10 @@
       lineup.innerHTML = "<div>다음 한글에 맞는 영어단어를 찾아보세요.</div>";
       sbutton.innerHTML = '<input class="realbutton" type="button" id="startstudy" value="다음학습" onclick="wordplay_5in()">';
 
+      // set current play and reset counter
+      currentPlay = 'play4';
+      playCounters.play4 = 0;
+
       wordplay_4();
     }
 
@@ -2741,6 +2880,16 @@
 
       //문제의 한글을 담는변수
       let qkorean;
+      // enforce limit per play and increment counter
+      if(currentPlay === 'play4'){
+        playCounters.play4++;
+        if(playLimits.play4>0 && playCounters.play4>playLimits.play4){
+          alert('Play4 횟수 제한에 도달했습니다. 학습을 종료합니다.');
+          wordplay_5in();
+          return;
+        }
+      }
+
       //음성이 있다면 다 멈춤
       myaudio.pause();
       myaudio.currentTime = 0;

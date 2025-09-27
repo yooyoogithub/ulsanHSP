@@ -114,13 +114,27 @@
               <div style="background-color: beige;">확인학습점수</div>
               <div id="playscore"></div>
               <hr>
+              <div style="background-color: beige;">게임 횟수 제한 설정</div>
+              <div style="font-size:13px; margin-top:6px;">
+                <label>Play1 (그림 선택): </label>
+                <input id="limit_play1" type="number" min="0" max="999" value="0" style="width:60px"> 회<br>
+                <label>Play2 (단어 선택): </label>
+                <input id="limit_play2" type="number" min="0" max="999" value="0" style="width:60px"> 회<br>
+                <label>Play3 (패턴 선택): </label>
+                <input id="limit_play3" type="number" min="0" max="999" value="0" style="width:60px"> 회<br>
+                <label>Play4 (뜻->단어): </label>
+                <input id="limit_play4" type="number" min="0" max="999" value="0" style="width:60px"> 회<br>
+                <div style="margin-top:3px;"><button class="justbutton" id="applyLimits">적용</button></div>
+                <div id="limitsStatus" style="margin-top:6px; font-size:15px; color:#333;"></div>
+              </div>
+              <hr>
               <div>
-                <input type="button" style="width: 100px;height: 40px;" value="학습시간보기" name="sendresult" onclick="SendResult()">
+                <input type="button" style="width: 120px;height: 40px;" value="학습시간보기" name="sendresult" onclick="SendResult()">
               </div>
         </aside>
     </section>
-    <footer>
-        This page is made by Charlie. If it has any problem, contact us through Kakao ID "yoyocacao".
-    </footer>
+  <footer>
+    <span class="credit-text">This page is made by Charlie. If it has any problem, contact us through Kakao ID "yoyocacao".</span>
+  </footer>
 </body>
 </html> 
