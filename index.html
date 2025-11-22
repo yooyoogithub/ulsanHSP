@@ -1,140 +1,163 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-<meta charset="utf-8">
-    <!--외부 스타일시트 참조 원래는 <style> </style>-->
-    <link href="etc/newphonics.css" rel="stylesheet" type="text/css">
 
-    <!--외부 JavaScript 참조-->
-    <script type="text/javascript" src="etc/newphonics.js"></script>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MiraeN Edu Plus English Phonics Play</title>
+
+  <!--외부 스타일시트 참조-->
+  <link href="etc/newphonics.css" rel="stylesheet" type="text/css">
+
+  <!--외부 JavaScript 참조-->
+  <script type="text/javascript" src="etc/newphonics.js"></script>
 </head>
+
 <body onload="getCurrentTime()">
-    <header class="header1">
-        <div>You are an authorized individual.</div>
-    </header>
-    <header class="header2">
-        <div>
-            <img src="HSP2.PNG" width="100px" height="40px" style="vertical-align: center;">
-            Welcome to MiraeN Edu Plus English Phonics Play!!
-            <img src="HSP3.PNG" width="100px"height="40px" style="vertical-align: center;">
-        </div>
-    </header>
-    <section>
-        <nav>
-            <div style="color:black">
-                <br>
-                <div style="color:blue">교재선택</div>
-                <select name="book" id="book">
-                  <option value="Alphabet Phonics">Alphabet Phonics</option>
-                  <option value="Easy Phonics">Easy Phonics</option>
-                  <option value="Easy Phonics Plus">Easy Phonics Plus</option>
-                  <option value="Phonics Fun 1">Phonics Fun 1</option>
-                  <option value="Phonics Fun 2">Phonics Fun 2</option>
-                  <option value="Phonics Fun 3">Phonics Fun 3</option>
-                  <option value="Phonics Town 1">Phonics Town 1</option>
-                  <option value="Phonics Town 2">Phonics Town 2</option>
-                  <option value="Phonics Town 3">Phonics Town 3</option>
-                  <option value="Theme English 1">Theme English 1</option>
-                  <option value="Theme English 2">Theme English 2</option>
-                  <option value="Theme English 3">Theme English 3</option>
-                  <option value="Theme English 4">Theme English 4</option>
-                  <option value="Theme English 5">Theme English 5</option>
-                  <option value="Theme English 6">Theme English 6</option>
-                </select>
-              </div>
-              <br>              
-              <div style="color:blue;text-align:center;">유닛선택</div>
-              <div>
-                Unit 1: <input type="checkbox" class="realcheckbox" name="unit" value="1"><br>
-                Unit 2: <input type="checkbox" class="realcheckbox" name="unit" value="2"><br>
-                Unit 3: <input type="checkbox" class="realcheckbox" name="unit" value="3"><br>
-                Unit 4: <input type="checkbox" class="realcheckbox" name="unit" value="4"><br>
-                Unit 5: <input type="checkbox" class="realcheckbox" name="unit" value="5"><br>
-                Unit 6: <input type="checkbox" class="realcheckbox" name="unit" value="6"><br>
-                Unit 7: <input type="checkbox" class="realcheckbox" name="unit" value="7"><br>
-                Unit 8: <input type="checkbox" class="realcheckbox" name="unit" value="8"><br>
-                Unit 9: <input type="checkbox" class="realcheckbox" name="unit" value="9"><br>
-                Unit 10: <input type="checkbox" class="realcheckbox" name="unit" value="10"><br>
-                Unit 11: <input type="checkbox" class="realcheckbox" name="unit" value="11"><br>
-                Unit 12: <input type="checkbox" class="realcheckbox" name="unit" value="12"><br>
-                Unit 13: <input type="checkbox" class="realcheckbox" name="unit" value="13"><br>
-                Unit 14: <input type="checkbox" class="realcheckbox" name="unit" value="14"><br>
-                Unit 15: <input type="checkbox" class="realcheckbox" name="unit" value="15"><br>
-              </div>
-              <div>
-                <hr>전체유닛: <input type="checkbox" class="realcheckbox" name="unit" value="16">
-              <hr>
-              <input type="button" class="realbutton" value="선택완료" name="choose" onclick="Getunits()">
-              <br><br>
-                NO 이미지:<input type="checkbox" class="realcheckbox" name="nopicture" id="np">
-        </nav>
-        <container>
-            <article class="article1" id="title">
-                    <div>학습을 시작하기 위해서 교재와 유닛을 선택해 주세요.</div>
-            </article>
-            <article class="article2" id="main">
-              <img src="HSPC.PNG" width="100%" height="100%" id="mainimg">
-              <iframe id="mainframe" style="display:none"></iframe>
-            </article>
-            <article class="article3" id="sub">
-                    <div>Welcome to MiraeN EduPlus English Phoincs Learning Play!!</div>
-            </article>
-            <article class="article4" id="sbutton">
-                <input class="realbutton" type="button" id="startstudy" value="학습시작" onclick="StartStudy()">
-                <!--
-                    <input class="realbutton" type="button" id="showword"value="단어보기" onClick="">
-                    <input class="realbutton" type="button" id="nextbutton" value="다음" onClick="">
-                    <input class="realbutton" type="button" id="playgame" value="확인학습" onclick="">
-                -->
-            </article>
-        </container>
-        <aside>
-            <div style="color: blue;">
-                Statistics
-              </div>
-    
-              <div>
-                <div style="background-color:beige;">최초접속시간</div>
-                <div class="count" id="firstcon"></div>
-                <hr>
-                <div style="background-color: beige;">현재시간</div>
-                <div class="count" id="connectTime" class="connectedTime"></div>
-              </div>
-              <hr>
-              <div style="background-color: beige;">학습시간</div>
-              <div class="count" id="totalstudytime"></div>
-              <div class="count" id="endstudytime"></div>
-              <div class="count" id="realstudytime"></div>
-              <hr>
-              <div style="background-color: beige;">반복횟수</div>
-              <div id="repeat"></div>
-              <hr>
-              <div id="repeatnumber"></div>
-              <hr>
-              <div style="background-color: beige;">확인학습점수</div>
-              <div id="playscore"></div>
-              <hr>
-              <div style="background-color: beige;">게임 횟수 제한 설정</div>
-              <div style="font-size:13px; margin-top:6px;">
-                <label>Play1 (그림 선택): </label>
-                <input id="limit_play1" type="number" min="0" max="999" value="0" style="width:60px"> 회<br>
-                <label>Play2 (단어 선택): </label>
-                <input id="limit_play2" type="number" min="0" max="999" value="0" style="width:60px"> 회<br>
-                <label>Play3 (패턴 선택): </label>
-                <input id="limit_play3" type="number" min="0" max="999" value="0" style="width:60px"> 회<br>
-                <label>Play4 (뜻->단어): </label>
-                <input id="limit_play4" type="number" min="0" max="999" value="0" style="width:60px"> 회<br>
-                <div style="margin-top:3px;"><button class="justbutton" id="applyLimits">적용</button></div>
-                <div id="limitsStatus" style="margin-top:6px; font-size:15px; color:#333;"></div>
-              </div>
-              <hr>
-              <div>
-                <input type="button" style="width: 120px;height: 40px;" value="학습시간보기" name="sendresult" onclick="SendResult()">
-              </div>
-        </aside>
-    </section>
+  <header class="header1">
+    <div>You are an authorized individual.</div>
+  </header>
+  <header class="header2">
+    <div>
+      <img src="HSP2.PNG" width="100px" height="40px" style="vertical-align: center;">
+      Welcome to MiraeN Edu Plus English Phonics Play!!
+      <img src="HSP3.PNG" width="100px" height="40px" style="vertical-align: center;">
+    </div>
+  </header>
+  <section>
+    <nav aria-label="학습 설정">
+      <div>
+        <div style="color:#8b5cf6;font-weight:600;margin-bottom:0.5rem;">📚 교재선택</div>
+        <select name="book" id="book" aria-label="교재 선택">
+          <option value="Alphabet Phonics">Alphabet Phonics</option>
+          <option value="Easy Phonics">Easy Phonics</option>
+          <option value="Easy Phonics Plus">Easy Phonics Plus</option>
+          <option value="Phonics Fun 1">Phonics Fun 1</option>
+          <option value="Phonics Fun 2">Phonics Fun 2</option>
+          <option value="Phonics Fun 3">Phonics Fun 3</option>
+          <option value="Phonics Town 1">Phonics Town 1</option>
+          <option value="Phonics Town 2">Phonics Town 2</option>
+          <option value="Phonics Town 3">Phonics Town 3</option>
+          <option value="Theme English 1">Theme English 1</option>
+          <option value="Theme English 2">Theme English 2</option>
+          <option value="Theme English 3">Theme English 3</option>
+          <option value="Theme English 4">Theme English 4</option>
+          <option value="Theme English 5">Theme English 5</option>
+          <option value="Theme English 6">Theme English 6</option>
+        </select>
+      </div>
+      <br>
+      <div style="color:#3b82f6;font-weight:600;text-align:center;margin-bottom:0.5rem;">📝 유닛선택</div>
+      <div style="font-size:13px;line-height:1.8;">
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="1"> Unit 1</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="2"> Unit 2</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="3"> Unit 3</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="4"> Unit 4</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="5"> Unit 5</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="6"> Unit 6</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="7"> Unit 7</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="8"> Unit 8</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="9"> Unit 9</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="10"> Unit 10</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="11"> Unit 11</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="12"> Unit 12</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="13"> Unit 13</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="14"> Unit 14</label><br>
+        <label><input type="checkbox" class="realcheckbox" name="unit" value="15"> Unit 15</label><br>
+      </div>
+      <div style="margin-top:1rem;">
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0.5rem 0;">
+        <label style="font-size:13px;"><input type="checkbox" class="realcheckbox" name="unit" value="16"> 전체유닛</label>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0.5rem 0;">
+        <input type="button" class="realbutton" value="✓ 선택완료" name="choose" onclick="Getunits()"
+          style="width:100%;margin-top:0.5rem;">
+        <br><br>
+        <label style="font-size:12px;"><input type="checkbox" class="realcheckbox" name="nopicture" id="np"> 🚫 NO
+          이미지</label>
+      </div>
+    </nav>
+    <container>
+      <article class="article1" id="title">
+        <div>학습을 시작하기 위해서 교재와 유닛을 선택해 주세요.</div>
+      </article>
+      <article class="article2" id="main">
+        <img src="HSPC.PNG" width="100%" height="100%" id="mainimg">
+        <iframe id="mainframe" style="display:none"></iframe>
+      </article>
+      <article class="article3" id="sub">
+        <div>Welcome to MiraeN EduPlus English Phoincs Learning Play!!</div>
+      </article>
+      <article class="article4" id="sbutton">
+        <input class="realbutton" type="button" id="startstudy" value="학습시작" onclick="StartStudy()">
+        <!--
+          <input class="realbutton" type="button" id="showword"value="단어보기" onClick="">
+          <input class="realbutton" type="button" id="nextbutton" value="다음" onClick="">
+          <input class="realbutton" type="button" id="playgame" value="확인학습" onclick="">
+        -->
+      </article>
+    </container>
+    <aside aria-label="학습 통계">
+      <div>
+        📊 Statistics
+      </div>
+
+      <div>
+        <div
+          style="background:rgba(139,92,246,0.2);color:#a78bfa;font-weight:600;padding:0.5rem;border-radius:0.375rem;margin-bottom:0.25rem;">
+          ⏰ 최초접속시간</div>
+        <div class="count" id="firstcon"></div>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0.75rem 0;">
+        <div
+          style="background:rgba(59,130,246,0.2);color:#60a5fa;font-weight:600;padding:0.5rem;border-radius:0.375rem;margin-bottom:0.25rem;">
+          🕐 현재시간</div>
+        <div class="count" id="connectTime" class="connectedTime"></div>
+      </div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0.75rem 0;">
+      <div
+        style="background:rgba(16,185,129,0.2);color:#34d399;font-weight:600;padding:0.5rem;border-radius:0.375rem;margin-bottom:0.25rem;">
+        📚 학습시간</div>
+      <div class="count" id="totalstudytime"></div>
+      <div class="count" id="endstudytime"></div>
+      <div class="count" id="realstudytime"></div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0.75rem 0;">
+      <div
+        style="background:rgba(245,158,11,0.2);color:#fbbf24;font-weight:600;padding:0.5rem;border-radius:0.375rem;margin-bottom:0.25rem;">
+        🔄 반복횟수</div>
+      <div id="repeat"></div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0.75rem 0;">
+      <div id="repeatnumber"></div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0.75rem 0;">
+      <div
+        style="background:rgba(236,72,153,0.2);color:#f472b6;font-weight:600;padding:0.5rem;border-radius:0.375rem;margin-bottom:0.25rem;">
+        🎯 확인학습점수</div>
+      <div id="playscore"></div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0.75rem 0;">
+      <div
+        style="background:rgba(99,102,241,0.2);color:#818cf8;font-weight:600;padding:0.5rem;border-radius:0.375rem;margin-bottom:0.5rem;">
+        🎮 게임 횟수 제한</div>
+      <div style="font-size:12px; margin-top:6px;line-height:1.8;">
+        <label style="display:block;margin-bottom:0.25rem;">Play1 (그림): <input id="limit_play1" type="number" min="0"
+            max="999" value="5" style="width:250px"> 회</label>
+        <label style="display:block;margin-bottom:0.25rem;">Play2 (단어): <input id="limit_play2" type="number" min="0"
+            max="999" value="5" style="width:250px"> 회</label>
+        <label style="display:block;margin-bottom:0.25rem;">Play3 (패턴): <input id="limit_play3" type="number" min="0"
+            max="999" value="5" style="width:250px"> 회</label>
+        <label style="display:block;margin-bottom:0.5rem;">Play4 (뜻→단어): <input id="limit_play4" type="number" min="0"
+            max="999" value="5" style="width:250px"> 회</label>
+        <button class="justbutton" id="applyLimits" style="width:100%;">✓ 적용</button>
+        <div id="limitsStatus" style="margin-top:6px; font-size:12px; color:#cbd5e1;"></div>
+      </div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:0.75rem 0;">
+      <div>
+        <button type="button" style="width:100%;height:40px;" value="학습시간보기" name="sendresult" onclick="SendResult()"
+          class="realbutton">📈 학습시간보기</button>
+      </div>
+    </aside>
+  </section>
   <footer>
-    <span class="credit-text">This page is made by Charlie. If it has any problem, contact us through Kakao ID "yoyocacao".</span>
+    <span class="credit-text">This page is made by Charlie. If it has any problem, contact us through Kakao ID
+      "yoyocacao".</span>
   </footer>
 </body>
-</html> 
+
+</html>

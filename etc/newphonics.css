@@ -1,163 +1,411 @@
-*{
+@charset "utf-8";
+
+/* Global Styles */
+:root {
+    --color-bg-primary: #0f172a;
+    --color-bg-secondary: #1e293b;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #cbd5e1;
+    --color-text-muted: #94a3b8;
+    --color-accent-primary: #8b5cf6;
+    --color-accent-secondary: #ec4899;
+    --color-border: rgba(255, 255, 255, 0.1);
+    --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+    --gradient-secondary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    --gradient-success: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+* {
     box-sizing: border-box;
-    font-size: bold;
-    font-family:Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-.header1{    
-    text-align: end;
-    font-size: 15px;
-    color: white;
-    background-color: rgb(70, 70, 175);
-    width:100%;    
-    height: 25px;
+body {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+    zoom: 0.6;
 }
 
-.header2{    
-    text-align: center;
-    align-content: center;
-    overflow: hidden; /* 글자등이 화면을 벗어나면 숨기기*/
-    color: white;    
-    font-size:30px ;
-    background-color: rgb(25, 31, 104);
-    width:100%;
-    height: 60px;
-    font-weight: bold;
-}
-
-section{
-    display: flex;    
-    color: black;
-    background-color:lavenderblush;
+/* Layout */
+section {
+    display: flex;
     width: 100%;
-    height: 600px;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    min-height: 100vh;
+    /* Allow expansion */
 }
 
-nav{
-    background-image: url('HannaHello.PNG');
-    background-size: 25%;
-    background-repeat: no-repeat;
-    text-align: center;
-    align-items: center;    
-    font-size: 12px;
-    color: black;
-    background-color:white;
-    width:15%;    
-    height: 600px;    
+nav {
+    width: 20%;
+    background: var(--color-bg-secondary);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    overflow-y: auto;
 }
 
-container{
+container {
+    width: 60%;
+    background: rgba(30, 41, 59, 0.5);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-xl);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    justify-content: center;
     align-items: center;
-    vertical-align: middle;
-    font-size: 15px;
-    color: black;
-    background-color: rgb(255, 255, 255);
-    width:70%;    
-    height: 600px;
+    min-height: 80vh;
+    /* Ensure minimum height */
 }
 
-.article1{
-    text-align: center;
-    font-size: 15px;
-    color: black;    
-    height: 5%;    
+aside {
+    width: 20%;
+    background: var(--color-bg-secondary);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    overflow-y: auto;
 }
 
-.article2{
-    text-align: center;
-    font-size: 15px;
-    color: black;
-    height: 80%;
-}
-
-.article3{
-    text-align: center;
-    font-size: 15px;
-    color: black;    
-    height: 5%;
-}
-
-.article4{
-    text-align: center;
-    font-size: 15px;
-    color: black;
-    height: 10%;
-}
-
-aside{
-    padding: 20px;
-    text-align: center;
-    font-size: 12px;
-    color: black;
-    background-color: white;
-    width:15%;    
-    height: 600px;
-}
-
-.count{
-    font-size:x-small;
-}
-
-footer{
-    vertical-align: middle;
-    text-align: center;
-    font-size: 15px;
+/* Header Styles */
+.header2 {
+    font-size: 24px;
+    font-weight: 700;
     color: white;
-    background-color:rgb(255, 255, 255);
-    width:100%;    
-    height: 25px;
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+    text-align: center;
+    /* Center align header content */
 }
 
-.credit-text{
-    background-color: #2b6cb0; /* blue background for text only */
-    padding: 2px 6px; /* small padding so the colored area hugs the text */
-    color: white; /* ensure text is readable */
-    border-radius: 3px;
+aside>div>div {
+    background: rgba(255, 255, 255, 0.03);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-xs);
+    font-size: 18px;
 }
 
-.realbutton{
+.count {
+    font-size: 18px;
+    color: var(--color-text-muted);
+    font-family: 'Courier New', monospace;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: var(--spacing-md);
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.credit-text {
+    background: var(--gradient-primary);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    color: white;
+    border-radius: var(--radius-lg);
+    font-size: 12px;
+    display: inline-block;
+    box-shadow: var(--shadow-md);
+}
+
+/* Form Controls */
+.realcheckbox {
+    width: 18px;
+    height: 18px;
     cursor: pointer;
-    width: 100px;
-    height: 40px;
-    /*border-radius: 3px;*/
+    accent-color: var(--color-accent-primary);
+    transition: transform var(--transition-fast);
 }
 
-.justbutton{
+.realcheckbox:hover {
+    transform: scale(1.1);
+}
+
+input[type="number"] {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-family: 'Inter', sans-serif;
+    transition: all var(--transition-base);
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--color-accent-primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+/* Enlarge Dropdown List */
+select {
+    font-size: 20px;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-primary);
+    width: 100%;
+    /* Make it full width of container */
+    margin-bottom: var(--spacing-sm);
+}
+
+select option {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+}
+
+/* Buttons */
+.realbutton,
+.justbutton {
     cursor: pointer;
-    width: 100px;
-    height: 30px;
-    /*border-radius: 3px;*/
-    font-size:x-small;
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: var(--radius-lg);
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
 }
 
-.questionimage imge {
-    -webkit-tranform:scale(1);
-    -moz-transform:scale(1);
-    -ms-transform:scale(1);
-    -o-tranform:scale(1);
+.realbutton::before,
+.justbutton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left var(--transition-slow);
+}
+
+.realbutton:hover,
+.justbutton:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl), var(--shadow-glow);
+}
+
+.realbutton:hover::before,
+.justbutton:hover::before {
+    left: 100%;
+}
+
+.realbutton:active,
+.justbutton:active {
+    transform: translateY(0);
+}
+
+.justbutton {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: 12px;
+}
+
+button[style*="width: 120px"] {
+    background: var(--gradient-success) !important;
+}
+
+/* Question Image Hover Effect */
+.questionimage img {
     transform: scale(1);
-    -webkit-transition:.3s;
-    -moz-transition:.3s;
-    -ms-transition:.3s;
-    -o-transition:.3s;
-    transition: .3s;
-    overflow: hidden;
+    transition: transform var(--transition-base);
     cursor: pointer;
-  }
+    border-radius: var(--radius-md);
+}
 
-  .questionimage:hover img {
-    -webkit-transform:scale(1.2);
-    -moz-transform:scale(1.2);
-    -ms-transform:scale(1.2);
-    -o-transform:scale(1.2);
-    transform:scale(1.2);
-    overflow: hidden;
-  }
+.questionimage:hover img {
+    transform: scale(1.15);
+    box-shadow: var(--shadow-xl);
+}
 
-  .qbutton{
-    font-size:xx-large;
+/* Quiz Button */
+.qbutton {
+    font-size: 20px;
+    font-weight: 600;
     width: 220px;
     height: 80px;
+    margin: 5px;
     cursor: pointer;
-  }
-  
+    background: var(--gradient-secondary);
+    border: none;
+    border-radius: var(--radius-lg);
+    color: white;
+    box-shadow: var(--shadow-lg);
+    transition: all var(--transition-base);
+}
+
+.qbutton:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-xl), 0 0 30px rgba(245, 87, 108, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    section {
+        flex-direction: column;
+    }
+
+    nav,
+    container,
+    aside {
+        width: 100%;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Apply fade-in animation to main elements */
+nav,
+container,
+aside {
+    animation: fadeIn var(--transition-slow) ease-out;
+}
+
+/* Utility Classes */
+.text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Center Start Button */
+#sbutton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: var(--spacing-md);
+}
+
+/* Enforce Uniform Large Font Size for Nav and Aside */
+nav,
+aside,
+nav *,
+aside * {
+    font-size: 26px !important;
+    line-height: 1.5 !important;
+}
+
+/* Adjust inputs in nav/aside to match font size */
+nav input[type="checkbox"],
+aside input[type="number"] {
+    width: 30px;
+    height: 30px;
+}
+
+aside input[type="number"] {
+    width: 100%;
+    /* Fill container width */
+    font-size: 32px;
+    /* Larger font */
+    padding: 10px;
+    /* Reduced padding to ensure text visibility */
+    height: 60px;
+    /* Fixed height for consistency */
+    text-align: center;
+    /* Center the number */
+}
+
+/* Fix Button Visibility in Aside */
+aside button,
+aside .realbutton {
+    height: auto !important;
+    padding: var(--spacing-md) !important;
+    min-height: 60px;
+}
+
+/* Center Game Content */
+#main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 60%;
+}
+
+#main>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    transform: scale(1.3);
+    /* Scale up game content */
+    transform-origin: center;
+}
+
+/* Double Button Size for Start/Next Study */
+#startstudy {
+    font-size: 28px !important;
+    /* Doubled from ~14px */
+    padding: 20px 40px !important;
+    /* Doubled padding */
+    border-radius: var(--radius-xl);
+}
